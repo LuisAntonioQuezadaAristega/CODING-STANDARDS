@@ -12,49 +12,42 @@ class itemz:
 
         self.env_fee = 0
 
-
-
-    def getTotal(self):
+    def gettotal(self):
 
         return self.price * self.qty
 
-    def getTMostPrices(self):
+    def gettmostprices(self):
 
         return self.price * self.qty * 0.6
 
+# class to shop
 
 
-#class to shop
-
-class shoppinCart:
+class shoppincart:
 
     def __init__(self):
 
         self.items = []
 
-        self.taxRate = 0.08
+        self.taxrate = 0.08
 
-        self.memberDiscount = 0.05
+        self.memberdiscount = 0.05
 
-        self.bigSpenderDiscount = 10
+        self.bigspenderdiscount = 10
 
-        self.couponDiscount = 0.15
+        self.coupondiscount = 0.15
 
         self.currency = "USD"
 
+    def additem(self, item):
 
-
-    def addItem(self, item):
-
-#discount added here
+        # discount added here
 
         self.items.append(item)
 
+    def calculatesubtotal(self):
 
-
-    def calculateSubtotal(self):
-
-#todo: fix this in the future i guess
+        # to do: fix this in the future i guess
 
         subtotal = 0
 
@@ -64,43 +57,38 @@ class shoppinCart:
 
         return subtotal
 
+    def applydiscounts(self, subtotal, ismember):
 
+        if ismember == "yes":
 
-    def applyDiscounts(self, subtotal, isMember, hasCoupon):
-
-        if isMember == "yes":
-
-            subtotal = subtotal - (subtotal * self.memberDiscount)
+            subtotal = subtotal - (subtotal * self.memberdiscount)
 
         if subtotal > 100:
 
-            subtotal = subtotal - self.bigSpenderDiscount
+            subtotal = subtotal - self.bigspenderdiscount
 
         return subtotal
 
+    def calculatetotal(self, ismember, hascoupon):
 
+        # why i need this? @user
 
-    def calculateTotal(self, isMember, hasCoupon):
+        subtotal = self.calculatesubtotal()
 
-#why i need this? @user
+        subtotal = self.applydiscounts(subtotal, ismember)
 
-        subtotal = self.calculateSubtotal()
+        total = subtotal + (subtotal * self.taxrate)
 
-        subtotal = self.applyDiscounts(subtotal, isMember, hasCoupon)
+        if hascoupon == "YES":
 
-        total = subtotal + (subtotal * self.taxRate)
-
-        if hasCoupon == "YES":
-
-            total = total - (total * self.couponDiscount)
+            total = total - (total * self.coupondiscount)
 
         return total
 
 
-
 def main():
 
-    cart = shoppinCart()
+    cart = shoppincart()
 
     item1 = itemz("Apple", 1.5, 10)
 
@@ -110,21 +98,17 @@ def main():
 
     item3.category = "electronics"
 
-    cart.addItem(item1)
+    cart.additem(item1)
 
-    cart.addItem(item2)
+    cart.additem(item2)
 
-    cart.addItem(item3)
+    cart.additem(item3)
 
-    isMember = True
+    ismember = True
 
-    hasCoupon = "YES"
+    hascoupon = "YES"
 
-
-
-    total = cart.calculateTotal(isMember, hasCoupon)
-
-
+    total = cart.calculateTotal(ismember, hascoupon)
 
     if total < 0:
 
@@ -133,7 +117,6 @@ def main():
     else:
 
         print("The total price is: $" + str(int(total)))
-
 
 
 if __name__ == "__main__":
