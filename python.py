@@ -14,7 +14,17 @@ class itemz:
 
     def gettotal(self):
 
-        return self.price * self.qty
+        if self.category == "electronics":
+
+            self.env_fee = 5
+
+        if type(self.price) is str or type(self.qty) is str:
+
+            print("Error: El precio o la cantidad fue ingresada como string")
+
+            return -1
+
+        return self.price * self.qty + self.env_fee
 
     def gettmostprices(self):
 
@@ -53,13 +63,19 @@ class shoppincart:
 
         for item in self.items:
 
-            subtotal += item.getTotal()
+            total = item.gettotal()
+
+            if total < 0:
+
+                return -1
+
+            subtotal += total
 
         return subtotal
 
     def applydiscounts(self, subtotal, ismember):
 
-        if ismember == "yes":
+        if ismember:
 
             subtotal = subtotal - (subtotal * self.memberdiscount)
 
@@ -79,7 +95,7 @@ class shoppincart:
 
         total = subtotal + (subtotal * self.taxrate)
 
-        if hascoupon == "YES":
+        if hascoupon:
 
             total = total - (total * self.coupondiscount)
 
@@ -94,7 +110,7 @@ def main():
 
     item2 = itemz("Banana", 0.5, 5)
 
-    item3 = itemz("Laptop", "1000", 1)
+    item3 = itemz("Laptop", 1000, 1)
 
     item3.category = "electronics"
 
@@ -106,9 +122,9 @@ def main():
 
     ismember = True
 
-    hascoupon = "YES"
+    hascoupon = True
 
-    total = cart.calculateTotal(ismember, hascoupon)
+    total = cart.calculatetotal(ismember, hascoupon)
 
     if total < 0:
 
